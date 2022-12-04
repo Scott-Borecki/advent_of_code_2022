@@ -1,7 +1,9 @@
 class RucksackReorganizer
   attr_reader :data
 
-  PRIORITY = ([""] + ('a'..'z').to_a + ('A'..'Z').to_a).freeze
+  COMPARTMENTS_PER_RUCKSACK = 2.freeze
+  GROUP_SIZE = 3.freeze
+  PRIORITY = ([""] + [*'a'..'z'] + [*'A'..'Z']).freeze
 
   def initialize(txt_file = 'input.txt')
     @data = File.readlines(txt_file).map { _1.chomp.chars }
@@ -9,31 +11,20 @@ class RucksackReorganizer
 
   def sum_item_type_priorities
     data.sum do |line|
-      compartment_size = line.length / 2
-      item_type = line.first(compartment_size) & line.last(compartment_size)
-      PRIORITY.find_index(item_type.first)
+      compartments = line.each_slice(line.length / COMPARTMENTS_PER_RUCKSACK).to_a
+      item_priority(*compartments)
     end
   end
 
   def sum_badge_type_priorities
-    elf_badge_groups.sum do |group|
-      group_badge_type = group[0].intersection(*group[1..-1])
-      PRIORITY.find_index(group_badge_type.first)
-    end
+    data.each_slice(GROUP_SIZE).to_a.sum { |group| item_priority(*group) }
   end
 
-  def elf_badge_groups(group_size = 3)
-    groups = []
-    group = []
-    data.each_with_index do |line, index|
-      if (index + 1) % group_size == 0
-        groups << (group << line)
-        group = []
-      else
-        group << line
-      end
-    end
-    groups
+  private
+
+  def item_priority(*collection)
+    item_type = PRIORITY.intersection(*collection)
+    PRIORITY.find_index(*item_type)
   end
 end
 
