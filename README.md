@@ -1,5 +1,5 @@
-## Advent of Code 2022
+## Advent of Code 2022 - ruby
 
 https://adventofcode.com/2022
 
-Here are my solutions to Advent of Code 2022.  Feel free to follow along!
+Here are my solutions to Advent of Code 2022 in ruby.  Feel free to follow along!
