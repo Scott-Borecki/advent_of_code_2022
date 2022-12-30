@@ -15,7 +15,7 @@ class CalorieCounter
   end
 
   def max_calories_carried(number_of_elves = 1)
-    calories_by_elf.sort[-number_of_elves..-1].sum
+    calories_by_elf.sort.last(number_of_elves).sum
   end
 end
 
